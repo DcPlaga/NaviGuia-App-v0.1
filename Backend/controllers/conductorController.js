@@ -1,4 +1,5 @@
 const Conductor = require('../models/Conductor');
+const bcrypt = require('bcrypt');
 
 exports.registrarConductor = async (req, res) => {
   try {
@@ -15,6 +16,8 @@ exports.registrarConductor = async (req, res) => {
       });
     }
 
+    const passwordHasheado = await bcrypt.hash(req.body.password, 10);
+
     const datos = {
       nombreCompleto: req.body.nombreCompleto,
       documento: req.body.documento,
@@ -27,7 +30,7 @@ exports.registrarConductor = async (req, res) => {
       correo: req.body.correo,
       zona: req.body.zona,
       horarios: Array.isArray(req.body.horarios) ? req.body.horarios : [req.body.horarios].filter(Boolean),
-      password: req.body.password
+      password: passwordHasheado
     };
 
     const nuevo = new Conductor(datos);

@@ -56,38 +56,65 @@ Verificación visual y auditiva de mensajes
 
 Estilo adaptado a lectores de pantalla
 
-📁 Estructura del código
+📁 Estructura del código (Esquema del proyecto)
 
-src/
+/Backend
+  /controllers
+    acompananteController.js
+    authController.js
+    conductorController.js
+    discapacitadoController.js
+    verificacionController.js
+  /middlewares
+    verificarToken.js
+  /models
+    Acompanante.js
+    Conductor.js
+    Discapacitado.js
+  /routes
+    acompananteRoutes.js
+    authRoutes.js
+    conductorRoutes.js
+    discapacitadoRoutes.js
+    verificacionRoutes.js
+  /uploads
+  db.js
+  index.js
+  .env
+/Frontend
+  /src
+    /assets
+      NaviGuiaHome.jp
+    /components
+      Botonesinicio.jsx
+      BotonesModoOscuroVolver.jsx
+      BotonesRuta.jsx
+    /Formularios
+      RegistroAcompanantes.jsx
+      RegistroConductores.jsx
+      RegistroDiscapacitados.jsx
+    /styles
+      Home.css
+      index.css
+      inicio.css
+      light.css
+      MapaCali.css
+      PaginaRuta.css
+      Perfil.css
+    /stylesdark
+      dark.css
+      iniciodark.css
+      PaginaRutadark.css
+    /utils
+      verificarCorreo.js
+    Home.jsx
+    index.js
+    inicioRegistro.js
+    login.jsx
+    MapaCali.jsx
+    PaginaRuta.jsx
+    Perfil.jsx
 
-├── components/
-
-│
-└── BotonesModoOscuroVolver.jsx
-
-├── formularios/
-
-│
-├── RegistroAcompanantes.jsx
-
-│
-├── RegistroDiscapacitados.jsx
-
-│
-└── RegistroConductores.jsx
-
-├── styles/
-
-│
-├── light.css
-
-│
-└── dark.css
-
-├── utils/
-
-│
-└── validaciones.js
 
 Licencia
-MIT © NyantaCat
+MIT © NyantaCat, 

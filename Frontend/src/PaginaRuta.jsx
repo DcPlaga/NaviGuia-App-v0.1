@@ -355,44 +355,46 @@ reiniciarAppRef.current = reiniciarApp;
   // Manejar doble toque para confirmación
   const manejarToquesConfirmacion = useCallback(() => {
     let toques = 0;
-    const tiempoEspera = 1000;
+    let timeoutId = null;
 
     const handler = () => {
+      // Cancelar el temporizador anterior si existe
+      if (timeoutId) clearTimeout(timeoutId);
+
+      // Incrementar contador de toques
       toques++;
-      clearTimeout(temporizadorRef.current);
-      temporizadorRef.current = setTimeout(() => {
+
+      // Configurar un nuevo temporizador
+      timeoutId = setTimeout(() => {
         if (toques === 2) {
+          // Confirmar destino
           confirmarDestino(destinoTemporal.current);
           setEstadoConfirmacion('confirmado');
           window.speechSynthesis.cancel();
           const mensajeConfirmado = new SpeechSynthesisUtterance(
-            `Destino confirmado. Iniciando la ruta hacia ${destinoTemporal.current}.`
+            `Destino confirmado: ${destinoTemporal.current}. Calculando ruta...`
           );
           window.speechSynthesis.speak(mensajeConfirmado);
           detenerRecordatorio();
-        } else {
-          setDestino(null);
-          destinoTemporal.current = "";
-          setEstadoConfirmacion('cancelado');
-          window.speechSynthesis.cancel();
-          const mensajeCancelado = new SpeechSynthesisUtterance(
-            "Has cancelado el destino. Presiona el micrófono nuevamente para ingresar un destino nuevo."
-          );
-          window.speechSynthesis.speak(mensajeCancelado);
-          iniciarRecordatorio(); 
+        } else if (toques === 1) {
+          // Solo un toque: no hagas nada (espera el segundo toque)
+          return;
         }
-        toques = 0;
-      }, tiempoEspera);
+        toques = 0; // Reiniciar contador
+      }, 300); // Tiempo de espera reducido para mejor respuesta
     };
 
-    document.addEventListener('touchstart', handler);
-    document.addEventListener('dblclick', handler); 
+    // Agregar event listeners
+    document.addEventListener('click', handler); // Para clicks de mouse
+    document.addEventListener('touchstart', handler); // Para pantallas táctiles
+
+    // Limpieza
     return () => {
+      document.removeEventListener('click', handler);
       document.removeEventListener('touchstart', handler);
-      document.removeEventListener('dblclick', handler); 
+      if (timeoutId) clearTimeout(timeoutId);
     };
-
-  }, [confirmarDestino, detenerRecordatorio, iniciarRecordatorio]);
+  }, [confirmarDestino, detenerRecordatorio]);
 
   // Click en mapa manual
   const ClickMapa = () => {
@@ -406,6 +408,23 @@ reiniciarAppRef.current = reiniciarApp;
   };
 
   // Efectos
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (estadoConfirmacion === 'esperando' && 
+          !e.target.closest('.confirmacion-overlay')) {
+        setEstadoConfirmacion('cancelado');
+        window.speechSynthesis.cancel();
+        const mensajeCancelado = new SpeechSynthesisUtterance(
+          "Búsqueda cancelada. Presiona el micrófono para intentar nuevamente."
+        );
+        window.speechSynthesis.speak(mensajeCancelado);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [estadoConfirmacion]);
 
   useEffect(() => {
     if (hablando || reconocimientoActivo) {

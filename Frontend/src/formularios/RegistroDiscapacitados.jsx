@@ -566,7 +566,7 @@ function FormularioDiscapacitados() {
               className="btn-enviar" 
               onClick={manejarEnvioFormulario} 
             >
-              {cargando ? 'Procesando...' : 'Registrarse'}
+              {'Registrarse'}
             </button>
             <div className="texto-cuenta">
               ¿Ya tienes una cuenta?{' '}

@@ -73,8 +73,28 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 Esquema del proyecto
 /Backend
+  /controllers
+    acompananteController.js
+    authController.js
+    conductorController.js
+    discapacitadoController.js
+    verificacionController.js
+  /middlewares
+    verificarToken.js
+  /models
+    Acompanante.js
+    Conductor.js
+    Discapacitado.js
+  /routes
+    acompananteRoutes.js
+    authRoutes.js
+    conductorRoutes.js
+    discapacitadoRoutes.js
+    verificacionRoutes.js
   /uploads
+  db.js
   index.js
+  .env
 /Frontend
   /src
     /assets
